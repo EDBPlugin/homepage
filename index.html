@@ -1,130 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDBP - Easy Discord Bot Plugin</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EDBP | Plugin Nexus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">EDBP</div>
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">家</a></li>
-                <li><a href="#shop" class="nav-link">店</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <!-- ホームセクション -->
-        <section id="home" class="section active">
-            <div class="container">
-                <h1>🌐 EDBP (Easy Discord bot Plugin) のご紹介</h1>
-                <div class="content-box">
-                    
-                    <hr>
+  <header>
+    <div class="logo">EDBP</div>
+    <div class="nav-controls">
+      <button class="lang-toggle" id="langToggle">JP</button>
+      <a href="#" class="nav-link" id="shopBtn">Plugin Nexus</a>
+    </div>
+  </header>
 
-                    <h2>🚀 EDBPとは？</h2>
-                    <p><strong>EDBP (Easy Discord bot Plugin)</strong> は、あなたのDiscordボットをさらに強力にするための拡張機能システムです。</p>
-                    <p>EDBPは、<strong>EDBB (Easy Discord bot Builder)</strong> に標準搭載されている強力な機能の一つで、ユーザーは<strong>コーディングの知識がなくても</strong>、ボットに多彩な機能を手軽に追加・拡張できます。</p>
-                    <p>これにより、開発者はもちろん、初めてボットを作成する方でも、自分の理想とするDiscordボットを簡単に実現できます！</p>
+  <main>
+    <section id="home" class="section active">
+      <h1 id="home-title">EDBP PLUGIN NEXUS</h1>
+      <h2 id="what-is-edbp">🚀 What is EDBP?</h2>
+      <p id="desc1">EDBP (Easy Discord Bot Plugin) is a modular extension system that supercharges your Discord bot—no coding required.</p>
+      <p id="desc2">Built into EDBB (Easy Discord Bot Builder), it empowers creators of all skill levels to customize bots with powerful, plug-and-play features.</p>
 
-                    <h2>🤖 プラグインの導入方法</h2>
-                    <p>EDBPでは、プラグインを非常に<strong>簡単かつ安全</strong>にボットへ組み込むことができます。導入方法は主に2通りあります。</p>
-                    
-                    <h3>1. 公式SHOPからの導入 (推奨)</h3>
-                    <p>EDBP内の<strong>SHOP</strong>機能を利用すれば、必要なプラグインを<strong>自動でインストール</strong>できます。面倒なファイル操作は一切不要です。</p>
-                    
-                    <h3>2. 手動での導入</h3>
-                    <p>SHOPにない独自のプラグインや、特定のファイル形式で共有されたプラグインをインストールする際にご利用いただけます。</p>
+      <h2 id="install-method">🤖 How to Install</h2>
+      <ul id="install-list">
+        <li><strong>1. Official Shop (Recommended)</strong> — Install plugins instantly from the Nexus. No file management.</li>
+        <li><strong>2. Manual Import</strong> — Load custom or community plugins via file import.</li>
+      </ul>
 
-                    <hr>
+      <h2 id="fetched-data">📥 Fetched Data (via GitHub)</h2>
+      <table>
+        <tr><th id="field">Field</th><th id="desc">Description</th></tr>
+        <tr><td>Name</td><td id="name-desc">Plugin title</td></tr>
+        <tr><td>Author</td><td id="author-desc">Developer handle</td></tr>
+        <tr><td>Stars</td><td id="stars-desc">Community popularity</td></tr>
+        <tr><td>Version</td><td id="version-desc">Latest release tag</td></tr>
+        <tr><td>Description</td><td id="desc-desc">Plugin functionality</td></tr>
+      </table>
+    </section>
 
-                    <h2>✨ プラグイン情報の取得（仕組みの説明）</h2>
-                    <p>あなたのウェブページでプラグインのリストを表示するために、EDBPは<strong>GitHubのタグ</strong>を利用して必要な情報を取得します。</p>
-                    <p>この仕組みにより、開発者はGitHub上でプラグインを管理し、ユーザーはウェブサイトを通じて最新の情報を確認できます。</p>
+    <section id="shop" class="section">
+      <a href="#" class="back-btn" id="homeFromShopBtn">← Back to Home</a>
+      <h1 id="shop-title">Plugin Nexus</h1>
+      <div id="shopContainer" class="shop-grid">
+        <div class="loading">Scanning GitHub for edbp-plugin...</div>
+      </div>
+    </section>
 
-                    <h3>📥 取得されるデータ項目</h3>
-                    <p>EDBPがGitHubリポジトリの特定の<strong>タグ</strong>（<code>edbp-plugin</code>）から取得し、一覧表示に利用する主なデータは以下の通りです。</p>
+    <section id="detail" class="section">
+      <a href="#" class="back-btn" id="backToShopBtn">← Back to Nexus</a>
+      <div id="detailContent">
+        <div class="loading">Loading changelog...</div>
+      </div>
+    </section>
+  </main>
 
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>データ項目</th>
-                                <th>説明</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>名前</strong></td>
-                                <td>プラグインの名称</td>
-                            </tr>
-                            <tr>
-                                <td><strong>作成日</strong></td>
-                                <td>プラグインが公開された日付</td>
-                            </tr>
-                            <tr>
-                                <td><strong>作成者</strong></td>
-                                <td>プラグインの開発者名</td>
-                            </tr>
-                            <tr>
-                                <td><strong>バージョン</strong></td>
-                                <td>プラグインの現在のバージョン情報</td>
-                            </tr>
-                            <tr>
-                                <td><strong>星の数</strong></td>
-                                <td>ユーザーからの評価（人気度を示す）</td>
-                            </tr>
-                            <tr>
-                                <td><strong>説明</strong></td>
-                                <td>プラグインの機能の概要</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="cta-button">
-                        <a href="#shop" class="btn">プラグインショップへ</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <footer id="footer-text">
+    © 2025 EDBP | Built for creators, by creators.
+  </footer>
 
-        <!-- ショップセクション -->
-        <section id="shop" class="section">
-            <div class="container">
-                <h1>プラグインショップ</h1>
-                <div class="content-box">
-                    <p class="shop-description">GitHubから「edbp-plugin」タグが付いたプラグインを表示しています。</p>
-                    
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="プラグインを検索...">
-                    </div>
-
-                    <div id="loading" class="loading">
-                        <div class="spinner"></div>
-                        <p>プラグインを読み込んでいます...</p>
-                    </div>
-
-                    <div id="error" class="error-message" style="display: none;">
-                        <p>プラグインの読み込みに失敗しました。後でもう一度お試しください。</p>
-                    </div>
-
-                    <div id="pluginList" class="plugin-list">
-                        <!-- プラグインはJavaScriptで動的に追加されます -->
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 EDBP - Easy Discord Bot Plugin. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
