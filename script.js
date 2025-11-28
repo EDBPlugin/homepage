@@ -1,181 +1,228 @@
-// ページナビゲーション
-document.addEventListener('DOMContentLoaded', function() {
-    // ナビゲーションリンクの処理
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.section');
+// 言語データ
+const translations = {
+  ja: {
+    homeTitle: "EDBP プラグイン・ネクサス",
+    whatIsEdbp: "🚀 EDBPとは？",
+    desc1: "EDBP (Easy Discord Bot Plugin) は、コーディング不要でDiscordボットを強化するモジュール式拡張システムです。",
+    desc2: "EDBB (Easy Discord Bot Builder) に組み込まれており、初心者からプロまで誰でも簡単に高機能ボットを構築できます。",
+    installMethod: "🤖 導入方法",
+    installList: [
+      "1. 公式ショップ（推奨） — ネクサスから即時インストール。ファイル操作不要。",
+      "2. 手動インポート — カスタムプラグインをファイルから読み込み。"
+    ],
+    fetchedData: "📥 取得データ（GitHub経由）",
+    field: "項目",
+    desc: "説明",
+    nameDesc: "プラグイン名",
+    authorDesc: "開発者名",
+    starsDesc: "人気度（スター数）",
+    versionDesc: "最新バージョン",
+    descDesc: "機能概要",
+    shopTitle: "プラグイン・ネクサス",
+    backToHome: "← Homeに戻る",
+    backToNexus: "← ネクサスに戻る",
+    changelog: "📜 更新履歴",
+    footer: "© 2025 EDBP | すべてのクリエイターへ、すべてのクリエイターによって。"
+  },
+  en: {
+    homeTitle: "EDBP PLUGIN NEXUS",
+    whatIsEdbp: "🚀 What is EDBP?",
+    desc1: "EDBP (Easy Discord Bot Plugin) is a modular extension system that supercharges your Discord bot—no coding required.",
+    desc2: "Built into EDBB (Easy Discord Bot Builder), it empowers creators of all skill levels to customize bots with powerful, plug-and-play features.",
+    installMethod: "🤖 How to Install",
+    installList: [
+      "1. Official Shop (Recommended) — Install plugins instantly from the Nexus. No file management.",
+      "2. Manual Import — Load custom or community plugins via file import."
+    ],
+    fetchedData: "📥 Fetched Data (via GitHub)",
+    field: "Field",
+    desc: "Description",
+    nameDesc: "Plugin title",
+    authorDesc: "Developer handle",
+    starsDesc: "Community popularity",
+    versionDesc: "Latest release tag",
+    descDesc: "Plugin functionality",
+    shopTitle: "Plugin Nexus",
+    backToHome: "← Back to Home",
+    backToNexus: "← Back to Nexus",
+    changelog: "📜 Changelog",
+    footer: "© 2025 EDBP | Built for creators, by creators."
+  }
+};
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            
-            // すべてのセクションを非表示
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // ターゲットセクションを表示
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-            }
+// 言語管理
+let currentLang = 'ja';
 
-            // ショップセクションの場合、プラグインを読み込む
-            if (targetId === 'shop') {
-                loadPlugins();
-            }
-        });
-    });
+const detectLanguage = () => {
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  if (urlLang === 'en' || urlLang === 'ja') return urlLang;
+  return navigator.language.startsWith('ja') ? 'ja' : 'en';
+};
 
-    // CTAボタンの処理
-    const ctaButton = document.querySelector('.cta-button a');
-    if (ctaButton) {
-        ctaButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            sections.forEach(section => section.classList.remove('active'));
-            document.getElementById('shop').classList.add('active');
-            loadPlugins();
-        });
-    }
+const setLanguage = (lang) => {
+  currentLang = lang;
+  const t = translations[lang];
 
-    // 検索機能
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            filterPlugins(this.value);
-        });
-    }
+  // ホーム
+  document.getElementById('home-title').textContent = t.homeTitle;
+  document.getElementById('what-is-edbp').textContent = t.whatIsEdbp;
+  document.getElementById('desc1').textContent = t.desc1;
+  document.getElementById('desc2').textContent = t.desc2;
+  document.getElementById('install-method').textContent = t.installMethod;
+  const installList = document.getElementById('install-list');
+  installList.innerHTML = t.installList.map(item => `<li>${item}</li>`).join('');
+  document.getElementById('fetched-data').textContent = t.fetchedData;
+  document.getElementById('field').textContent = t.field;
+  document.getElementById('desc').textContent = t.desc;
+  document.getElementById('name-desc').textContent = t.nameDesc;
+  document.getElementById('author-desc').textContent = t.authorDesc;
+  document.getElementById('stars-desc').textContent = t.starsDesc;
+  document.getElementById('version-desc').textContent = t.versionDesc;
+  document.getElementById('desc-desc').textContent = t.descDesc;
 
-    // 初期表示時にホームセクションをアクティブに
-    document.getElementById('home').classList.add('active');
+  // ショップ
+  document.getElementById('shop-title').textContent = t.shopTitle;
+  document.getElementById('homeFromShopBtn').textContent = t.backToHome;
+  document.getElementById('backToShopBtn').textContent = t.backToNexus;
+
+  // フッター
+  document.getElementById('footer-text').textContent = t.footer;
+
+  // 言語ボタン
+  document.getElementById('langToggle').textContent = lang === 'ja' ? 'EN' : 'JP';
+
+  // URLにlangを追加
+  const url = new URL(window.location);
+  url.searchParams.set('lang', lang);
+  history.replaceState(null, '', url);
+};
+
+// 切り替え
+document.getElementById('langToggle').addEventListener('click', () => {
+  setLanguage(currentLang === 'ja' ? 'en' : 'ja');
 });
 
-// プラグインデータを保存する変数
-let allPlugins = [];
+// セクション制御
+const showSection = id => {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+};
 
-// GitHubからプラグインを読み込む
-async function loadPlugins() {
-    const pluginList = document.getElementById('pluginList');
-    const loading = document.getElementById('loading');
-    const error = document.getElementById('error');
+document.getElementById('shopBtn').addEventListener('click', e => {
+  e.preventDefault();
+  showSection('shop');
+  if (!window.shopLoaded) loadShopData();
+});
 
-    // すでに読み込み済みの場合はスキップ
-    if (allPlugins.length > 0) {
-        return;
+document.getElementById('homeFromShopBtn').addEventListener('click', e => {
+  e.preventDefault();
+  showSection('home');
+});
+
+document.getElementById('backToShopBtn').addEventListener('click', e => {
+  e.preventDefault();
+  showSection('shop');
+});
+
+// GitHub
+const fetchPlugins = async () => {
+  try {
+    const res = await fetch('https://api.github.com/search/repositories?q=topic:edbp-plugin&sort=stars&order=desc&per_page=30');
+    const data = await res.json();
+    return data.items || [];
+  } catch {
+    return [];
+  }
+};
+
+const getReleases = async (owner, repo) => {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases?per_page=10`);
+    if (res.ok) {
+      const releases = await res.json();
+      return releases.map(r => ({
+        name: r.name || r.tag_name,
+        published_at: r.published_at,
+        body: r.body || 'No description.'
+      }));
     }
+  } catch {}
+  return [];
+};
 
-    loading.style.display = 'block';
-    error.style.display = 'none';
-    pluginList.innerHTML = '';
+const formatDate = (d, lang) => {
+  if (!d) return lang === 'ja' ? '不明' : 'Unknown';
+  return new Date(d).toLocaleDateString(lang === 'ja' ? 'ja-JP' : 'en-US');
+};
 
-    try {
-        // GitHub APIでedbp-pluginタグを持つリポジトリを検索
-        const response = await fetch('https://api.github.com/search/repositories?q=topic:edbp-plugin&sort=stars&order=desc&per_page=50');
-        
-        if (!response.ok) {
-            throw new Error('GitHub APIからのデータ取得に失敗しました');
-        }
+const loadShopData = async () => {
+  const plugins = await fetchPlugins();
+  const el = document.getElementById('shopContainer');
+  if (plugins.length === 0) {
+    el.innerHTML = `<div class="error">${currentLang === 'ja' ? 'プラグインが見つかりません' : 'No plugins found'}</div>`;
+    return;
+  }
 
-        const data = await response.json();
-        allPlugins = data.items || [];
-
-        loading.style.display = 'none';
-
-        if (allPlugins.length === 0) {
-            pluginList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">現在、プラグインは見つかりませんでした。</p>';
-            return;
-        }
-
-        displayPlugins(allPlugins);
-
-    } catch (err) {
-        console.error('プラグイン読み込みエラー:', err);
-        loading.style.display = 'none';
-        error.style.display = 'block';
-    }
-}
-
-// プラグインを表示する
-function displayPlugins(plugins) {
-    const pluginList = document.getElementById('pluginList');
-    pluginList.innerHTML = '';
-
-    plugins.forEach(plugin => {
-        const card = createPluginCard(plugin);
-        pluginList.appendChild(card);
-    });
-}
-
-// プラグインカードを作成する
-function createPluginCard(plugin) {
-    const card = document.createElement('div');
-    card.className = 'plugin-card';
-    
-    // 日付のフォーマット
-    const createdDate = new Date(plugin.created_at).toLocaleDateString('ja-JP');
-    
-    // 説明文を短縮
-    const description = plugin.description || '説明がありません';
-    const shortDescription = description.length > 100 ? description.substring(0, 100) + '...' : description;
-
-    // バージョン情報（タグから取得、なければデフォルト）
-    const version = 'v1.0.0'; // 実際のバージョンはreleases APIから取得可能
-
-    card.innerHTML = `
-        <div class="plugin-header">
-            <div>
-                <div class="plugin-name">${plugin.name}</div>
-                <div class="plugin-meta">作成者: ${plugin.owner.login}</div>
-                <div class="plugin-meta">作成日: ${createdDate}</div>
-            </div>
-            <div class="plugin-stars">
-                <span>⭐</span>
-                <span>${plugin.stargazers_count}</span>
-            </div>
+  el.innerHTML = plugins.slice(0, 12).map(p => `
+    <div class="shop-card" onclick="window.open('${p.html_url}', '_blank')">
+      <h3>${p.name}</h3>
+      <div class="plugin-meta">
+        <span class="author">@${p.owner.login}</span>
+        <span class="stars">★ ${p.stargazers_count}</span>
+      </div>
+      <p class="description">${p.description || (currentLang === 'ja' ? '説明なし' : 'No description.')}</p>
+      <div style="display:flex; gap:0.6rem; margin-top:1rem;">
+        <div class="view-releases" onclick="event.stopPropagation(); showPluginDetail('${p.owner.login}', '${p.name}')">
+          ${translations[currentLang].changelog}
         </div>
-        <div class="plugin-version">${version}</div>
-        <div class="plugin-description">${shortDescription}</div>
+      </div>
+    </div>
+  `).join('');
+  window.shopLoaded = true;
+};
+
+window.showPluginDetail = async (owner, repo) => {
+  const el = document.getElementById('detailContent');
+  el.innerHTML = `<div class="loading">${currentLang === 'ja' ? '更新履歴を読み込み中...' : 'Loading changelog...'}</div>`;
+  showSection('detail');
+
+  try {
+    const [repoData, releases] = await Promise.all([
+      fetch(`https://api.github.com/repos/${owner}/${repo}`).then(r => r.json()),
+      getReleases(owner, repo)
+    ]);
+
+    const desc = repoData.description || (currentLang === 'ja' ? '説明なし' : 'No description.');
+    const releaseHtml = releases.length ? releases.map(r => `
+      <div class="release-item">
+        <div class="release-header">${r.name}</div>
+        <div class="release-date">${formatDate(r.published_at, currentLang)}</div>
+        <div class="release-body">${r.body.replace(/\n/g, '<br>')}</div>
+      </div>
+    `).join('') : `<p>${currentLang === 'ja' ? 'リリース履歴がありません' : 'No releases found.'}</p>`;
+
+    el.innerHTML = `
+      <h1>${repoData.name}</h1>
+      <p class="description">${desc}</p>
+      <div style="margin:1rem 0; color:var(--text-muted);">
+        by <span class="author">@${owner}</span> • <span class="stars">★ ${repoData.stargazers_count}</span>
+      </div>
+      <h2>${currentLang === 'ja' ? `更新履歴 (${releases.length} 件)` : `Changelog (${releases.length} releases)`}</h2>
+      ${releaseHtml}
     `;
+  } catch {
+    el.innerHTML = `<div class="error">${currentLang === 'ja' ? 'プラグイン情報の取得に失敗しました' : 'Failed to load plugin details.'}</div>`;
+  }
+};
 
-    // クリックでGitHubリポジトリを開く
-    card.addEventListener('click', function() {
-        window.open(plugin.html_url, '_blank');
-    });
+// 初期化
+window.addEventListener('load', () => {
+  currentLang = detectLanguage();
+  setLanguage(currentLang);
 
-    return card;
-}
-
-// プラグインをフィルタリングする
-function filterPlugins(searchTerm) {
-    if (allPlugins.length === 0) return;
-
-    const term = searchTerm.toLowerCase();
-    const filtered = allPlugins.filter(plugin => {
-        const name = plugin.name.toLowerCase();
-        const description = (plugin.description || '').toLowerCase();
-        const author = plugin.owner.login.toLowerCase();
-        
-        return name.includes(term) || description.includes(term) || author.includes(term);
-    });
-
-    displayPlugins(filtered);
-
-    // 結果がない場合のメッセージ
-    if (filtered.length === 0) {
-        const pluginList = document.getElementById('pluginList');
-        pluginList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">検索結果が見つかりませんでした。</p>';
-    }
-}
-
-// スムーズスクロール
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href !== '#') {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-    });
+  const plugin = new URLSearchParams(window.location.search).get('plugin');
+  if (plugin && plugin.includes('/')) {
+    const [o, r] = plugin.split('/');
+    showPluginDetail(o, r);
+  }
 });
